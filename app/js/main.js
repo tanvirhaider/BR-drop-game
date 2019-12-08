@@ -17,6 +17,12 @@ var completedScreen = document.getElementById("completed");
 var device = "mobile";  // "desktop", "mobile"
 
 
+/* STOPWATCH code here ===================
+==========================================
+==========================================
+========================================*/
+
+
 var Stopwatch = function(elem, options) {
 
     var timer       = createTimer(),
@@ -98,6 +104,16 @@ var Stopwatch = function(elem, options) {
 var timerDisplayBox = document.getElementById("timerDisplayBox");
 var StopWatch = new Stopwatch(timerDisplayBox);
 
+
+
+
+/* GAME START code here ==================
+==========================================
+==========================================
+========================================*/
+
+
+
 var startGame = function () {
    
    var tempBoxselection = Math.floor((Math.random() * 10) + 1);
@@ -145,9 +161,6 @@ var startGame = function () {
 
     currentBox = boxQueue[currentIndex];
 
-   
-
-
     function step (timestamp) {
         if (!start || progress > ( containerHeight - 150 )) {
             console.log("------------  progress complete");
@@ -160,7 +173,7 @@ var startGame = function () {
 
         stopID = window.requestAnimationFrame(step);
 
-        var colVal = isCollapsed (testBucket,currentBox);
+        var colVal = HitTest (testBucket,currentBox);
         console.log("collide value: ", colVal);
 
         if (colVal) {
@@ -185,10 +198,13 @@ var startGame = function () {
 
 }
 
-// Make the DIV element draggable:
+/* DRAG - Desktop code here ==============
+==========================================
+==========================================
+========================================*/
 
 
-function dragElement(elmnt) {
+function DragElementDesktop (elmnt) {
   var pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
 
 
@@ -235,26 +251,19 @@ function dragElement(elmnt) {
 }
 
 
+/* collide / hit test code here ==========
+==========================================
+==========================================
+========================================*/
 
 
-
-function isCollapsed(dragMe, rect){
-    var object_1 = dragMe.getBoundingClientRect();
-    var object_2 = rect.getBoundingClientRect();
+function HitTest(Item1, Item2){
+    var object_1 = Item1.getBoundingClientRect();
+    var object_2 = Item2.getBoundingClientRect();
     var collideValue = false;
     
-    if (object_1.left < object_2.left + object_2.width  && object_1.left + object_1.width  > object_2.left &&
-          object_1.top < object_2.top + object_2.height && object_1.top + object_1.height > object_2.top) {
-      //rect.classList.add("collide");
-      collideValue = true;
-     
-
-    }
-    else{
-      //rect.classList.remove("collide");
-      collideValue = false;
-      //console.log("do nothing nothing");
-    }
+    if (object_1.left < object_2.left + object_2.width  && object_1.left + object_1.width  > object_2.left && object_1.top < object_2.top + object_2.height && object_1.top + object_1.height > object_2.top) { collideValue = true;}
+    else { collideValue = false; }
 
     return collideValue;
   }
@@ -262,10 +271,14 @@ function isCollapsed(dragMe, rect){
 
 
 
-startGame ();
+
+/* DRAG - Mobile code here ==============
+==========================================
+==========================================
+========================================*/
 
 
-function makeDragable(dragHandle, dragTarget) {
+function DragElementMobile (dragHandle, dragTarget) {
     var dragObj = null; //object to be moved
     var xOffset = 0; //used to prevent dragged object jumping to mouse location
     var yOffset = 0;
@@ -319,7 +332,10 @@ function makeDragable(dragHandle, dragTarget) {
   }
 
  
-  
+  /* Mobile Device Detection code here ===
+==========================================
+==========================================
+========================================*/
 
   var isMobile = {
     Android: function() {
@@ -343,14 +359,14 @@ function makeDragable(dragHandle, dragTarget) {
 };
 
 if( isMobile.any() ) {
-    makeDragable(testBucket, testBucket);
+    DragElementMobile (testBucket, testBucket);
 } 
 else {
-    dragElement(testBucket);
+    DragElementDesktop (testBucket);
 }
 
  
 
 
-
+startGame ();
 
